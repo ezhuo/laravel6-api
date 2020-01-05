@@ -4,8 +4,7 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends HttpKernel
-{
+class Kernel extends HttpKernel {
     /**
      * The application's global HTTP middleware stack.
      *
@@ -19,6 +18,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Fruitcake\Cors\HandleCors::class,
     ];
 
     /**
@@ -51,16 +52,30 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+//        'auth' => \App\Http\Middleware\Authenticate::class,
+//        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+//        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+//        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        'before' => \App\Http\Middleware\BeforeMiddleware::class,
+        'after' => \App\Http\Middleware\AfterMiddleware::class,
+        'monitor_pc' => \App\Http\Middleware\MonitorPcMiddleware::class,
+        'monitor_app' => \App\Http\Middleware\MonitorAppMiddleware::class,
+        'monitor_weixin' => \App\Http\Middleware\MonitorWeiXinMiddleware::class,
+
+        'source_sys' => \App\Http\Middleware\SourceSysMiddleware::class,
+        'source_org' => \App\Http\Middleware\SourceOrgMiddleware::class,
+
+        'auth' => \App\Http\Middleware\AuthMiddleware::class,
+
+        // 'cors' => \App\Http\Middleware\CorsMiddleware::class,
+        'cors' => \Fruitcake\Cors\HandleCors::class,
     ];
 
     /**
@@ -73,7 +88,7 @@ class Kernel extends HttpKernel
     protected $middlewarePriority = [
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\Authenticate::class,
+//        \App\Http\Middleware\Authenticate::class,
         \Illuminate\Routing\Middleware\ThrottleRequests::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,

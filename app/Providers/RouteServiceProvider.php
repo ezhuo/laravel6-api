@@ -46,7 +46,11 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        $this->mapApiPcRoutes();
+
+        $this->mapApiAppRoutes();
+
+        $this->mapApiWeiXinRoutes();
     }
 
     /**
@@ -76,5 +80,33 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    protected function mapApiPcRoutes()
+    {
+        Route::prefix('api/sys/pc/v1')
+            ->middleware('api')
+            ->middleware(['before', 'monitor_pc', 'source_sys', 'after'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/pc.php'));
+    }
+
+    protected function mapApiAppRoutes()
+    {
+        Route::prefix('api/sys/app/v1')
+            ->middleware('cors')
+            ->middleware('api')
+            ->middleware(['before', 'monitor_app', 'source_sys', 'after'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/app.php'));
+    }
+
+    protected function mapApiWeiXinRoutes()
+    {
+        Route::prefix('api/weixin/v1')
+            ->middleware('api')
+            ->middleware(['before', 'monitor_weixin', 'after'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/wx.php'));
     }
 }
